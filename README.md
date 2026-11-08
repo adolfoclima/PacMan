@@ -2,12 +2,13 @@
   <img src="./assets/pacman-logo.svg" alt="Logo Pac-Man" width="720">
 
   <p>
-    <strong>Um jogo Pac-Man moderno, criado com Vite, JavaScript e Canvas.</strong>
+    <strong>Um jogo Pac-Man moderno, criado com React, Vite e HTML Canvas.</strong>
   </p>
 
   <p>
     <a href="#-como-rodar-o-projeto"><img src="https://img.shields.io/badge/rodar%20localmente-vite-646cff?style=for-the-badge&logo=vite&logoColor=white" alt="Rodar localmente"></a>
-    <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=222222" alt="JavaScript">
+    <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=222222" alt="React">
+    <img src="https://img.shields.io/badge/emotion-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white" alt="Emotion">
     <img src="https://img.shields.io/badge/canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="Canvas">
   </p>
 </div>
@@ -24,44 +25,48 @@
 
 ## Sobre o projeto
 
-Este projeto recria a experiencia arcade de Pac-Man diretamente no navegador, com labirintos inspirados no estilo classico, portais laterais e verticais, fantasmas com comportamentos distintos, fases progressivas e efeitos sonoros sintetizados em tempo real.
+Este projeto recria a experiência arcade de Pac-Man diretamente no navegador, com labirintos inspirados no estilo clássico, portais, fantasmas com comportamentos distintos, fases progressivas e efeitos sonoros sintetizados em tempo real.
 
-Nao usa assets de audio externos: toda a trilha ambiente e os efeitos sao gerados pelo Web Audio API.
+O React é responsável pela interface, pelo ciclo de vida dos componentes e pelos controles. O motor do jogo permanece separado em módulos de estado, movimento, colisão, IA, áudio, renderização e geração de fases.
+
+Não usa assets de áudio externos: toda a trilha ambiente e os efeitos são gerados pela Web Audio API.
 
 ## Funcionalidades
 
-- Movimento continuo com controles por teclado, WASD, setas e botoes touch
-- Confirmacao por Enter nas telas Ready, Game Over, replay e proxima fase
-- Quatro pellets especiais por fase
-- Modo de vulnerabilidade dos fantasmas por tempo limitado
-- Quatro fantasmas com cores e personalidades originais: Blinky, Pinky, Inky e Clyde
-- Mapas simetricos com corredores e blocos inspirados nos labirintos arcade
-- Portais horizontais, verticais ou ambos
-- Sistema de vidas, pontuacao e fases
-- Controles visiveis no rodape
-- Efeitos sonoros de interface, ambiente, movimento, comida, fantasmas, paredes, portais e resultados
-- Botao para ativar ou desativar o audio
-- Interface responsiva para desktop e dispositivos moveis
+- Movimento contínuo por teclado, WASD, setas e controles touch
+- Controles de teclado e confirmação por Enter nas telas do jogo
+- Controles D-pad em tablet e celular
+- Quatro fantasmas com comportamentos distintos
+- Pellets especiais com modo de vulnerabilidade temporária
+- Portais laterais, verticais ou combinados conforme o mapa
+- Sistema de vidas, pontuação e fases progressivas
+- Efeitos sonoros de interface, ambiente, movimento, comida, fantasmas, portais e resultados
+- Controle para ativar ou desativar o áudio
+- Interface responsiva com estilos gerenciados pelo Emotion
+- Seletor moderno de idioma com bandeiras
+- Português, inglês e espanhol com detecção automática do idioma do navegador
+- Preferência de idioma persistida no navegador
 
 ## Controles
 
-| Acao | Teclado | Rodape / Tela |
-|---|---|---|
-| Mover para cima | `W` ou `Seta para cima` | Botao `▲` |
-| Mover para esquerda | `A` ou `Seta para esquerda` | Botao `◀` |
-| Mover para baixo | `S` ou `Seta para baixo` | Botao `▼` |
-| Mover para direita | `D` ou `Seta para direita` | Botao `▶` |
-| Iniciar ou confirmar | `Enter` | Botao `ENTER` |
-| Controlar som | Clique ou toque no icone `♪` | Botao de som |
+| Ação | Teclado | Desktop | Tablet / Celular |
+|---|---|---|---|
+| Mover para cima | `W` ou `Seta para cima` | Botão `W / ▲` | Botão `▲` |
+| Mover para esquerda | `A` ou `Seta para esquerda` | Botão `A / ◀` | Botão `◀` |
+| Mover para baixo | `S` ou `Seta para baixo` | Botão `S / ▼` | Botão `▼` |
+| Mover para direita | `D` ou `Seta para direita` | Botão `D / ▶` | Botão `▶` |
+| Iniciar ou confirmar | `Enter` | Botão de confirmação | Botão na tela |
+| Controlar som | Clique ou toque no botão | Botão de som | Botão de som |
+| Alterar idioma | Selecione no menu | Seletor com bandeira | Seletor com bandeira |
 
 ## Como rodar o projeto
 
 ### Requisitos
 
-- [Node.js](https://nodejs.org/) versao 20 ou superior
-- npm instalado junto com o Node.js
+- [Node.js](https://nodejs.org/) versão 20.19 ou superior
+- npm
 
-### Instalacao
+### Instalação
 
 ```bash
 git clone https://github.com/adolfoclima/PacMan.git
@@ -69,31 +74,26 @@ cd PacMan
 npm install
 ```
 
-### Iniciar em modo desenvolvimento
+### Desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-Abra o endereco exibido pelo Vite, normalmente:
+O Vite exibirá o endereço local, normalmente:
 
 ```text
 http://localhost:5173/
 ```
 
-### Gerar versao de producao
+### Produção
 
 ```bash
 npm run build
-```
-
-Os arquivos otimizados serao criados na pasta `dist`.
-
-### Visualizar a versao de producao
-
-```bash
 npm run preview
 ```
+
+Os arquivos otimizados são gerados na pasta `dist`.
 
 ### Qualidade e testes
 
@@ -104,7 +104,7 @@ npm run format:check
 npm run build
 ```
 
-Durante o desenvolvimento, os testes podem ser executados continuamente com:
+Para executar os testes continuamente:
 
 ```bash
 npm run test:watch
@@ -112,13 +112,16 @@ npm run test:watch
 
 ## Tecnologias utilizadas
 
+- React 19
+- React DOM
 - Vite
-- JavaScript moderno
+- Emotion Styled e Emotion React
 - HTML Canvas
-- CSS responsivo
 - Web Audio API
-- Vitest, ESLint e Prettier
-- Git e GitHub
+- JavaScript moderno
+- Jest
+- ESLint
+- Prettier
 
 ## Estrutura principal
 
@@ -127,30 +130,36 @@ PacMan/
 ├── assets/
 │   ├── pacman-logo.svg
 │   └── game-preview.png
-├── public/
 ├── src/
 │   ├── audio/          # Web Audio e efeitos sonoros
-│   ├── config/         # Configuracao centralizada
-│   ├── controllers/    # Entrada de teclado e controles
-│   ├── entities/       # Fabricas das entidades
-│   ├── game/           # Fases, movimento, IA, colisao e ciclo
-│   ├── render/         # Renderizacao Canvas
-│   ├── ui/             # Interface, HUD e overlays
-│   ├── main.js         # Bootstrap da aplicacao
-│   └── style.css
+│   ├── config/         # Configuração centralizada
+│   ├── entities/       # Entidades e fábricas dos personagens
+│   ├── game/           # Estado, movimento, colisão, IA e fases
+│   ├── i18n/           # Idiomas, detecção e persistência
+│   ├── render/         # Renderização do jogo em Canvas
+│   ├── ui/
+│   │   ├── GameApp.jsx              # Orquestração da aplicação React
+│   │   ├── GlobalStyles.jsx         # Estilos globais básicos
+│   │   └── components/
+│   │       ├── GameBoard.jsx        # Tabuleiro, canvas e overlay
+│   │       ├── GameControls.jsx     # Controles desktop e touch
+│   │       ├── GameHud.jsx          # Pontuação, fase e vidas
+│   │       ├── LanguageSelector.jsx # Menu e estilos do idioma
+│   │       └── Topbar.jsx           # Cabeçalho e controle de áudio
+│   └── main.jsx        # Bootstrap da aplicação React
 ├── index.html
 ├── package.json
+├── vite.config.js
 └── README.md
 ```
 
 ## Regras do jogo
 
 - Coma os pellets pequenos para acumular pontos
-- Pellets especiais deixam os fantasmas vulneraveis por alguns segundos
-- Toque em um fantasma vulneravel para recebe-lo de volta ao centro
-- Atravesse os portais para sair pelo lado oposto
-- Perder um encontro com um fantasma vivo remove uma vida
-- Ao eliminar todas as comidas, o jogador avanca para a fase seguinte
+- Pellets especiais deixam os fantasmas vulneráveis por alguns segundos
+- Use os portais para atravessar o mapa pelos lados opostos
+- Um encontro com um fantasma vivo remove uma vida
+- Comer todos os pellets disponíveis avança para a fase seguinte
 
 ## Autor
 
@@ -159,5 +168,5 @@ Desenvolvido por [Adolfo Lima](https://github.com/adolfoclima).
 ---
 
 <div align="center">
-  <img src="./assets/pacman-logo.svg" alt="Pac-Man logo" width="360">
+  <img src="./assets/pacman-logo.svg" alt="Logo Pac-Man" width="360">
 </div>

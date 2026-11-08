@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import {
   DEFAULT_LOCALE,
   I18n,
@@ -9,15 +9,15 @@ import {
 describe("I18n", () => {
   beforeEach(() => {
     const storage = new Map();
-    vi.stubGlobal("localStorage", {
+    globalThis.localStorage = {
       getItem: (key) => storage.get(key) ?? null,
       setItem: (key, value) => storage.set(key, value),
-    });
-    vi.stubGlobal("navigator", { languages: ["pt-BR"] });
-    vi.stubGlobal("document", {
+    };
+    globalThis.navigator = { languages: ["pt-BR"] };
+    globalThis.document = {
       documentElement: { lang: "", dir: "" },
       title: "",
-    });
+    };
   });
 
   it("detects and normalizes a matching browser locale", () => {
@@ -41,7 +41,7 @@ describe("I18n", () => {
 
   it("persists and broadcasts locale changes", () => {
     const i18n = new I18n();
-    const listener = vi.fn();
+    const listener = jest.fn();
     i18n.subscribe(listener);
     i18n.setLocale("en-US");
     expect(i18n.locale).toBe("en-US");

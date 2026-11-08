@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "@jest/globals";
 import { GAME_CONFIG } from "../config/gameConfig.js";
 import { LevelGenerator } from "./LevelGenerator.js";
 

@@ -1,20 +1,20 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import { GameLoop } from "./GameLoop.js";
 
 describe("GameLoop", () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   it("pauses without scheduling another animation frame", () => {
     let frameCallback;
-    const requestAnimationFrame = vi.fn((callback) => {
+    const requestAnimationFrame = jest.fn((callback) => {
       frameCallback = callback;
       return 12;
     });
-    vi.stubGlobal("requestAnimationFrame", requestAnimationFrame);
-    vi.stubGlobal("cancelAnimationFrame", vi.fn());
-    vi.stubGlobal("performance", { now: () => 1000 });
+    globalThis.requestAnimationFrame = requestAnimationFrame;
+    globalThis.cancelAnimationFrame = jest.fn();
+    globalThis.performance = { now: () => 1000 };
 
     const loop = new GameLoop(() => loop.pause());
     loop.start();
@@ -25,12 +25,9 @@ describe("GameLoop", () => {
   });
 
   it("stops and cancels the current frame", () => {
-    vi.stubGlobal(
-      "requestAnimationFrame",
-      vi.fn(() => 42),
-    );
-    vi.stubGlobal("cancelAnimationFrame", vi.fn());
-    vi.stubGlobal("performance", { now: () => 1000 });
+    globalThis.requestAnimationFrame = jest.fn(() => 42);
+    globalThis.cancelAnimationFrame = jest.fn();
+    globalThis.performance = { now: () => 1000 };
 
     const loop = new GameLoop(() => {});
     loop.start();

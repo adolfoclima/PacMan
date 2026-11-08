@@ -9,14 +9,12 @@ import { Movement } from "./Movement.js";
 import { GhostAI } from "./GhostAI.js";
 import { CollisionRules } from "./CollisionRules.js";
 import { GameRenderer } from "../render/GameRenderer.js";
-import { GameUI } from "../ui/GameUI.js";
 import { AudioService } from "../audio/AudioService.js";
-import { InputController } from "../controllers/InputController.js";
 import { GAME_STATES, GameState } from "./GameState.js";
 import { GameLoop } from "./GameLoop.js";
 
 export class PacManGame {
-  constructor(i18n) {
+  constructor(canvas, context, ui) {
     this.level = 1;
     this.score = 0;
     this.lives = 3;
@@ -27,8 +25,7 @@ export class PacManGame {
     this.lifeLostTimeout = null;
     this.lifeLostDeadline = 0;
     this.audioService = new AudioService();
-    this.i18n = i18n;
-    this.ui = new GameUI(i18n);
+    this.ui = ui;
     this.levelState = {
       map: [],
       tunnelOrientation: "horizontal",
@@ -39,20 +36,13 @@ export class PacManGame {
     this.ghostAI = new GhostAI(this.movement);
     this.collisionRules = new CollisionRules(this.levelState);
     this.renderer = new GameRenderer(
-      this.ui.canvas,
-      this.ui.context,
+      canvas,
+      context,
       this.levelState,
       () => this.frightenedUntil,
     );
     this.player = createPlayer();
     this.ghosts = createGhosts();
-    this.inputController = new InputController(
-      () => this.player,
-      this.ui,
-      this.audioService,
-      () => this.start(),
-      () => this.running,
-    );
     this.prepareLevel();
     this.ui.updateHud(this.score, this.lives, this.level);
     this.renderer.draw(this.player, this.ghosts, performance.now());
@@ -221,13 +211,29 @@ export class PacManGame {
     }
   }
 
+  setDirection(direction) {
+    this.player.nextDir = direction;
+    this.player.nextDirExpires = performance.now() + 700;
+    this.audioService.ensureContext();
+    this.audioService.direction(direction);
+  }
+
+  toggleSound() {
+    const enabled = !this.audioService.enabled;
+    this.audioService.setEnabled(enabled);
+    this.ui.setSoundEnabled(enabled);
+    if (enabled) {
+      this.audioService.ensureContext();
+      this.audioService.menu();
+      if (this.running) this.audioService.startAmbient();
+    }
+  }
+
   destroy() {
     this.gameLoop.stop();
     if (this.lifeLostTimeout !== null)
       window.clearTimeout(this.lifeLostTimeout);
     document.removeEventListener("visibilitychange", this.visibilityHandler);
-    this.inputController?.destroy();
-    this.ui.destroy();
     this.audioService.destroy();
   }
 }
