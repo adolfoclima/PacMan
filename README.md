@@ -114,7 +114,14 @@ PacMan/
 │   └── game-preview.png
 ├── public/
 ├── src/
-│   ├── main.js
+│   ├── audio/          # Web Audio e efeitos sonoros
+│   ├── config/         # Configuracao centralizada
+│   ├── controllers/    # Entrada de teclado e controles
+│   ├── entities/       # Fabricas das entidades
+│   ├── game/           # Fases, movimento, IA, colisao e ciclo
+│   ├── render/         # Renderizacao Canvas
+│   ├── ui/             # Interface, HUD e overlays
+│   ├── main.js         # Bootstrap da aplicacao
 │   └── style.css
 ├── index.html
 ├── package.json
