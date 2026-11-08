@@ -16,7 +16,7 @@ import { GAME_STATES, GameState } from "./GameState.js";
 import { GameLoop } from "./GameLoop.js";
 
 export class PacManGame {
-  constructor() {
+  constructor(i18n) {
     this.level = 1;
     this.score = 0;
     this.lives = 3;
@@ -27,7 +27,8 @@ export class PacManGame {
     this.lifeLostTimeout = null;
     this.lifeLostDeadline = 0;
     this.audioService = new AudioService();
-    this.ui = new GameUI();
+    this.i18n = i18n;
+    this.ui = new GameUI(i18n);
     this.levelState = {
       map: [],
       tunnelOrientation: "horizontal",
@@ -126,9 +127,10 @@ export class PacManGame {
       this.gameLoop.pause();
       this.audioService.gameOver();
       this.ui.showOverlay(
-        "FIM DE JOGO",
-        `${this.score} pontos`,
-        "TENTAR NOVAMENTE",
+        "gameOver",
+        "pointsCount",
+        { count: this.score },
+        "retry",
       );
     } else {
       this.running = false;
@@ -193,9 +195,13 @@ export class PacManGame {
       this.level++;
       this.gameLoop.pause();
       this.ui.showOverlay(
-        "FASE CONCLUÍDA!",
-        `Fase ${this.level - 1} concluída · Próxima fase: ${this.level}`,
-        "JOGAR NOVAMENTE",
+        "levelComplete",
+        "nextLevel",
+        {
+          completed: this.level - 1,
+          next: this.level,
+        },
+        "start",
       );
     }
   }
@@ -221,6 +227,7 @@ export class PacManGame {
       window.clearTimeout(this.lifeLostTimeout);
     document.removeEventListener("visibilitychange", this.visibilityHandler);
     this.inputController?.destroy();
+    this.ui.destroy();
     this.audioService.destroy();
   }
 }
