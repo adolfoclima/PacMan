@@ -87,7 +87,7 @@ export class PacManGame {
     if (this.running) {
       this.movement.move(this.player, GAME_CONFIG.playerSpeed, dt, true)
       this.collectPellet()
-      this.ghosts.forEach(ghost => this.ghostAI.update(ghost, this.player, this.frightenedUntil, dt, now))
+      this.ghosts.forEach(ghost => this.ghostAI.update(ghost, this.player, this.frightenedUntil, dt, now, this.ghosts))
       this.checkGhostCollisions(now)
     }
     this.renderer.draw(this.player, this.ghosts, now)
@@ -122,7 +122,13 @@ export class PacManGame {
         this.score += 200
         this.ui.updateHud(this.score, this.lives, this.level)
         this.audioService.ghostEaten()
-        Object.assign(ghost, { x: 10.5 * GAME_CONFIG.tileSize, y: 9.5 * GAME_CONFIG.tileSize, dir: 'left' })
+        Object.assign(ghost, {
+          x: ghost.spawnX,
+          y: ghost.spawnY,
+          dir: 'left',
+          lastDecision: '',
+          lastDecision: ''
+        })
       } else {
         this.loseLife()
         break

@@ -39,17 +39,27 @@ export class Movement {
   move (entity, speed, dt, isPlayer = false) {
     const { columns, rows } = GAME_CONFIG
     if (isPlayer && entity.nextDir) {
+      if (entity.nextDirExpires && performance.now() >= entity.nextDirExpires) {
+        entity.nextDir = 'none'
+        entity.nextDirExpires = 0
+      }
       if (entity.nextDir === REVERSE_DIRECTION[entity.dir]) {
         entity.dir = entity.nextDir
         entity.nextDir = 'none'
+        entity.nextDirExpires = 0
       } else if (entity.nextDir === entity.dir) {
         entity.nextDir = 'none'
+        entity.nextDirExpires = 0
       } else if (this.atCenter(entity.x) && this.atCenter(entity.y)) {
         if (this.canMove(entity.x, entity.y, entity.nextDir)) {
           this.alignTurnAxis(entity, entity.nextDir)
           entity.dir = entity.nextDir
+          entity.nextDir = 'none'
+          entity.nextDirExpires = 0
         }
+      } else if (this.tryBufferedTurn(entity)) {
         entity.nextDir = 'none'
+        entity.nextDirExpires = 0
       }
     }
 
@@ -76,6 +86,43 @@ export class Movement {
     } else {
       entity.x = this.nearestCenter(entity.x)
     }
+  }
+
+  tryBufferedTurn (entity) {
+    const { tileSize } = GAME_CONFIG
+    const direction = DIRECTIONS[entity.nextDir]
+    const currentDirection = DIRECTIONS[entity.dir] || DIRECTIONS.none
+    if (!direction || !currentDirection || direction.x === currentDirection.x && direction.y === currentDirection.y) return false
+    if (direction.x !== 0 && currentDirection.x !== 0) return false
+    if (direction.y !== 0 && currentDirection.y !== 0) return false
+
+    const turnWindow = 4
+
+    if (currentDirection.x !== 0) {
+      if (!this.atCenter(entity.y)) return false
+      const gridPosition = (entity.x - tileSize / 2) / tileSize
+      const centerIndex = currentDirection.x > 0 ? Math.ceil(gridPosition) : Math.floor(gridPosition)
+      const candidateX = centerIndex * tileSize + tileSize / 2
+      if (Math.abs(entity.x - candidateX) > turnWindow) return false
+      if (!this.canMove(candidateX, entity.y, entity.nextDir)) return false
+      this.alignTurnAxis(entity, entity.nextDir)
+      entity.dir = entity.nextDir
+      return true
+    }
+
+    if (currentDirection.y !== 0) {
+      if (!this.atCenter(entity.x)) return false
+      const gridPosition = (entity.y - tileSize / 2) / tileSize
+      const centerIndex = currentDirection.y > 0 ? Math.ceil(gridPosition) : Math.floor(gridPosition)
+      const candidateY = centerIndex * tileSize + tileSize / 2
+      if (Math.abs(entity.y - candidateY) > turnWindow) return false
+      if (!this.canMove(entity.x, candidateY, entity.nextDir)) return false
+      this.alignTurnAxis(entity, entity.nextDir)
+      entity.dir = entity.nextDir
+      return true
+    }
+
+    return false
   }
 
   alignToCorridor (entity) {

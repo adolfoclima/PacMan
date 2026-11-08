@@ -34,7 +34,7 @@ Nao usa assets de audio externos: toda a trilha ambiente e os efeitos sao gerado
 - Confirmacao por Enter nas telas Ready, Game Over, replay e proxima fase
 - Quatro pellets especiais por fase
 - Modo de vulnerabilidade dos fantasmas por tempo limitado
-- Tres fantasmas com personalidades diferentes
+- Quatro fantasmas com cores e personalidades originais: Blinky, Pinky, Inky e Clyde
 - Mapas simetricos com corredores e blocos inspirados nos labirintos arcade
 - Portais horizontais, verticais ou ambos
 - Sistema de vidas, pontuacao e fases
