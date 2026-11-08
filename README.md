@@ -95,6 +95,18 @@ npm run preview
 
 Os arquivos otimizados são gerados na pasta `dist`.
 
+### Implantação na Vercel
+
+O projeto já inclui `vercel.json` com o framework Vite, o diretório de saída e o fallback da aplicação.
+
+1. Faça o push do projeto para GitHub, GitLab ou Bitbucket.
+2. Importe o repositório na [Vercel](https://vercel.com/new).
+3. Mantenha:
+   - Framework Preset: `Vite`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+4. Implante.
+
 ### Qualidade e testes
 
 ```bash
