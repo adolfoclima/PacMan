@@ -48,9 +48,8 @@ export class Movement {
         entity.nextDir = entity.dir
         entity.nextDirExpires = 0
       } else if (entity.nextDir === entity.dir) {
-        entity.nextDir = entity.dir
         entity.nextDirExpires = 0
-      } else if (this.atTurnCenter(entity.x) && this.atTurnCenter(entity.y) && this.canMove(entity.x, entity.y, entity.nextDir)) {
+      } else if (this.atCenter(entity.x) && this.atCenter(entity.y) && this.canMove(entity.x, entity.y, entity.nextDir)) {
         this.snap(entity)
         entity.dir = entity.nextDir
         entity.nextDir = entity.dir
@@ -58,8 +57,9 @@ export class Movement {
       }
     }
 
-    if (!this.canMove(entity.x, entity.y, entity.dir)) {
+    if (this.atCenter(entity.x) && this.atCenter(entity.y) && !this.canMove(entity.x, entity.y, entity.dir)) {
       if (entity.dir !== 'none') {
+        this.snap(entity)
         entity.dir = 'none'
         if (isPlayer) {
           const now = performance.now()
