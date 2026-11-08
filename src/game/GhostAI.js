@@ -13,21 +13,24 @@ export class GhostAI {
       const gx = Math.round((ghost.x - tileSize / 2) / tileSize)
       const gy = Math.round((ghost.y - tileSize / 2) / tileSize)
       const decisionKey = `${gx},${gy}`
-      if (ghost.lastDecision === decisionKey) {
-        this.movement.move(ghost, ghost.speed, dt, false)
-        return
-      }
-      ghost.lastDecision = decisionKey
-      let options = Object.keys(DIRECTIONS).filter(dir => dir !== 'none' && this.movement.canMove(ghost.x, ghost.y, dir))
-      const reverse = REVERSE_DIRECTION[ghost.dir]
-      const forwardOptions = options.filter(dir => dir !== reverse)
-      if (forwardOptions.length) options = forwardOptions
+      if (ghost.lastDecision !== decisionKey) {
+        ghost.lastDecision = decisionKey
+        let options = Object.keys(DIRECTIONS).filter(dir => dir !== 'none' && this.movement.canMove(ghost.x, ghost.y, dir))
+        const reverse = REVERSE_DIRECTION[ghost.dir]
+        const forwardOptions = options.filter(dir => dir !== reverse)
+        if (forwardOptions.length) options = forwardOptions
+        if (!options.length && reverse && this.movement.canMove(ghost.x, ghost.y, reverse)) options = [reverse]
 
-      if (options.length) {
-        ghost.dir = this.chooseDirection(ghost, player, gx, gy, options, frightenedUntil > now)
+        if (options.length) {
+          ghost.dir = this.chooseDirection(ghost, player, gx, gy, options, frightenedUntil > now)
+        } else {
+          ghost.dir = 'none'
+        }
+      } else if (!this.movement.canMove(ghost.x, ghost.y, ghost.dir)) {
+        let options = Object.keys(DIRECTIONS).filter(dir => dir !== 'none' && this.movement.canMove(ghost.x, ghost.y, dir))
+        if (options.length) ghost.dir = options[0]
       } else {
-        ghost.dir = 'none'
-        ghost.centerLock = false
+        this.movement.alignToCorridor(ghost)
       }
     }
     this.movement.move(ghost, ghost.speed, dt, false)
