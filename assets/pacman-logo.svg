@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 180" role="img" aria-labelledby="title desc">
+  <title id="title">Pac-Man</title>
+  <desc id="desc">Logotipo amarelo do Pac-Man com fantasmas e pellets</desc>
+  <rect width="920" height="180" rx="24" fill="#090a15"/>
+  <path d="M90 38a52 52 0 1 1 0 104l52-52z" fill="#ffe438"/>
+  <circle cx="165" cy="90" r="8" fill="#ffdda8"/>
+  <circle cx="205" cy="90" r="8" fill="#ffdda8"/>
+  <circle cx="245" cy="90" r="8" fill="#ffdda8"/>
+  <g transform="translate(290,45)">
+    <path d="M0 80V50a34 34 0 0 1 68 0v30l-9-9-8 9-9-9-9 9-8-9-8 9z" fill="#ff4b4b"/>
+    <circle cx="23" cy="45" r="7" fill="#fff"/><circle cx="45" cy="45" r="7" fill="#fff"/>
+    <circle cx="23" cy="45" r="3" fill="#2844b5"/><circle cx="45" cy="45" r="3" fill="#2844b5"/>
+  </g>
+  <text x="380" y="117" fill="#ffe438" font-family="Arial Black, Impact, sans-serif" font-size="82" font-weight="900" letter-spacing="3">PAC-MAN</text>
+</svg>
