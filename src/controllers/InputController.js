@@ -62,7 +62,6 @@ export class InputController {
   setPlayerDirection (direction) {
     const player = this.getPlayer()
     player.nextDir = direction
-    player.nextDirExpires = 0
   }
 
   toggleSound () {

@@ -41,19 +41,15 @@ export class Movement {
     if (isPlayer && entity.nextDir) {
       if (entity.nextDir === REVERSE_DIRECTION[entity.dir]) {
         entity.dir = entity.nextDir
-        entity.nextDir = entity.dir
-        entity.nextDirExpires = 0
+        entity.nextDir = 'none'
       } else if (entity.nextDir === entity.dir) {
-        entity.nextDirExpires = 0
+        entity.nextDir = 'none'
       } else if (this.atCenter(entity.x) && this.atCenter(entity.y)) {
         if (this.canMove(entity.x, entity.y, entity.nextDir)) {
           this.alignTurnAxis(entity, entity.nextDir)
           entity.dir = entity.nextDir
-          entity.nextDir = entity.dir
-          entity.nextDirExpires = 0
-        } else {
-          entity.nextDirExpires = 0
         }
+        entity.nextDir = 'none'
       }
     }
 

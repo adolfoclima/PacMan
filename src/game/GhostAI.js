@@ -12,6 +12,12 @@ export class GhostAI {
       this.movement.snap(ghost)
       const gx = Math.round((ghost.x - tileSize / 2) / tileSize)
       const gy = Math.round((ghost.y - tileSize / 2) / tileSize)
+      const decisionKey = `${gx},${gy}`
+      if (ghost.lastDecision === decisionKey) {
+        this.movement.move(ghost, ghost.speed, dt, false)
+        return
+      }
+      ghost.lastDecision = decisionKey
       let options = Object.keys(DIRECTIONS).filter(dir => dir !== 'none' && this.movement.canMove(ghost.x, ghost.y, dir))
       const reverse = REVERSE_DIRECTION[ghost.dir]
       const forwardOptions = options.filter(dir => dir !== reverse)
