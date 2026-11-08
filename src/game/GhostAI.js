@@ -12,7 +12,7 @@ export class GhostAI {
     const yDistance = Math.abs(((ghost.y - tileSize / 2) / tileSize) - Math.round((ghost.y - tileSize / 2) / tileSize))
     if (xDistance > 0.08 || yDistance > 0.08) ghost.centerLock = false
 
-    if (!ghost.centerLock && this.movement.atCenter(ghost.x) && this.movement.atCenter(ghost.y)) {
+    if (!ghost.centerLock && this.movement.atTurnCenter(ghost.x) && this.movement.atTurnCenter(ghost.y)) {
       ghost.centerLock = true
       this.movement.snap(ghost)
       const gx = Math.round((ghost.x - tileSize / 2) / tileSize)

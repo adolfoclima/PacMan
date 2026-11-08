@@ -62,7 +62,7 @@ export class InputController {
   setPlayerDirection (direction) {
     const player = this.getPlayer()
     player.nextDir = direction
-    player.nextDirExpires = performance.now() + 300
+    player.nextDirExpires = 0
   }
 
   toggleSound () {
