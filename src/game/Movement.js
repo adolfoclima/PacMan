@@ -1,5 +1,5 @@
 import { GAME_CONFIG } from '../config/gameConfig.js'
-import { DIRECTIONS } from '../entities/directions.js'
+import { DIRECTIONS, REVERSE_DIRECTION } from '../entities/directions.js'
 
 export class Movement {
   constructor (levelState, audioService) {
@@ -11,6 +11,11 @@ export class Movement {
   atCenter (value) {
     const gridPosition = (value - GAME_CONFIG.tileSize / 2) / GAME_CONFIG.tileSize
     return Math.abs(gridPosition - Math.round(gridPosition)) < 0.065
+  }
+
+  atTurnCenter (value) {
+    const gridPosition = (value - GAME_CONFIG.tileSize / 2) / GAME_CONFIG.tileSize
+    return Math.abs(gridPosition - Math.round(gridPosition)) < 0.12
   }
 
   snap (entity) {
@@ -33,17 +38,30 @@ export class Movement {
 
   move (entity, speed, dt, isPlayer = false) {
     const { tileSize, columns, rows } = GAME_CONFIG
-    const xDistance = Math.abs(((entity.x - tileSize / 2) / tileSize) - Math.round((entity.x - tileSize / 2) / tileSize))
-    const yDistance = Math.abs(((entity.y - tileSize / 2) / tileSize) - Math.round((entity.y - tileSize / 2) / tileSize))
-    if (xDistance > 0.08 || yDistance > 0.08) entity.centerLock = false
+    if (isPlayer && entity.nextDir) {
+      const now = performance.now()
+      if (entity.nextDirExpires && now > entity.nextDirExpires) {
+        entity.nextDir = entity.dir
+        entity.nextDirExpires = 0
+      } else if (entity.nextDir === REVERSE_DIRECTION[entity.dir]) {
+        entity.dir = entity.nextDir
+        entity.nextDir = entity.dir
+        entity.nextDirExpires = 0
+      } else if (entity.nextDir === entity.dir) {
+        entity.nextDir = entity.dir
+        entity.nextDirExpires = 0
+      } else if (this.atTurnCenter(entity.x) && this.atTurnCenter(entity.y) && this.canMove(entity.x, entity.y, entity.nextDir)) {
+        this.snap(entity)
+        entity.dir = entity.nextDir
+        entity.nextDir = entity.dir
+        entity.nextDirExpires = 0
+      }
+    }
 
-    if (!entity.centerLock && this.atCenter(entity.x) && this.atCenter(entity.y)) {
-      entity.centerLock = true
-      this.snap(entity)
-      if (entity.nextDir && this.canMove(entity.x, entity.y, entity.nextDir)) entity.dir = entity.nextDir
-      if (!this.canMove(entity.x, entity.y, entity.dir)) {
+    if (!this.canMove(entity.x, entity.y, entity.dir)) {
+      if (entity.dir !== 'none') {
+        this.snap(entity)
         entity.dir = 'none'
-        entity.centerLock = false
         if (isPlayer) {
           const now = performance.now()
           if (now - this.wallSoundAt > 180) {

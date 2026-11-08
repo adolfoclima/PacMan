@@ -14,7 +14,7 @@ export class InputController {
       const direction = keyMap[event.key] || keyMap[event.key.toLowerCase()]
       if (direction) {
         event.preventDefault()
-        this.getPlayer().nextDir = direction
+        this.setPlayerDirection(direction)
       }
       if (event.key === 'Enter' && !event.repeat && !this.ui.overlay.classList.contains('hidden')) {
         event.preventDefault()
@@ -25,12 +25,13 @@ export class InputController {
     document.querySelectorAll('[data-dir]').forEach(button => {
       const setDirection = event => {
         if (event?.cancelable) event.preventDefault()
-        this.getPlayer().nextDir = button.dataset.dir
+        this.setPlayerDirection(button.dataset.dir)
         this.audioService.ensureContext()
         this.audioService.direction(button.dataset.dir)
         document.querySelectorAll('.control-key').forEach(key => key.classList.remove('active'))
         if (button.classList.contains('control-key')) button.classList.add('active')
       }
+
       button.addEventListener('pointerdown', setDirection)
       button.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') setDirection(event)
@@ -56,6 +57,12 @@ export class InputController {
       this.audioService.ensureContext()
       if (!this.ui.overlay.classList.contains('hidden')) this.audioService.menu()
     }, { once: true })
+  }
+
+  setPlayerDirection (direction) {
+    const player = this.getPlayer()
+    player.nextDir = direction
+    player.nextDirExpires = performance.now() + 300
   }
 
   toggleSound () {

@@ -7,6 +7,7 @@ export function createPlayer () {
     y: 16.5 * tileSize,
     dir: 'left',
     nextDir: 'left',
+    nextDirExpires: 0,
     mouth: 0,
     centerLock: false
   }
