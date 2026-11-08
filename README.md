@@ -95,6 +95,21 @@ Os arquivos otimizados serao criados na pasta `dist`.
 npm run preview
 ```
 
+### Qualidade e testes
+
+```bash
+npm run test
+npm run lint
+npm run format:check
+npm run build
+```
+
+Durante o desenvolvimento, os testes podem ser executados continuamente com:
+
+```bash
+npm run test:watch
+```
+
 ## Tecnologias utilizadas
 
 - Vite
@@ -102,6 +117,7 @@ npm run preview
 - HTML Canvas
 - CSS responsivo
 - Web Audio API
+- Vitest, ESLint e Prettier
 - Git e GitHub
 
 ## Estrutura principal

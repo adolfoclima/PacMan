@@ -1,4 +1,6 @@
-import './style.css'
-import { PacManGame } from './game/PacManGame.js'
+import "./style.css";
+import { PacManGame } from "./game/PacManGame.js";
 
-new PacManGame()
+const game = new PacManGame();
+
+window.addEventListener("pagehide", () => game.destroy(), { once: true });

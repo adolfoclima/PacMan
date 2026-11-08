@@ -4,5 +4,5 @@ export const GAME_CONFIG = Object.freeze({
   rows: 21,
   playerSpeed: 92,
   frightenedDuration: 7000,
-  ghostCollisionDistance: 15
-})
+  ghostCollisionDistance: 15,
+});
