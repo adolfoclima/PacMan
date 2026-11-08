@@ -55,6 +55,7 @@ describe("I18n", () => {
     expect(i18n.t("phase", { level: 4 })).toBe("FASE 4");
     expect(i18n.t("livesCount", { count: 1 })).toBe("1 vida");
     expect(i18n.t("livesCount", { count: 0 })).toBe("0 vidas");
+    expect(i18n.t("nextPhase")).toBe("JOGAR PRÓXIMA FASE");
     i18n.setLocale("en-US");
     expect(i18n.t("livesCount", { count: 1 })).toBe("1 life");
     expect(SUPPORTED_LOCALES).toEqual(["pt-BR", "en-US", "es-ES"]);

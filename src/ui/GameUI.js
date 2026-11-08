@@ -25,12 +25,31 @@ export class GameUI {
     );
     this.mobileControls = document.querySelector(".mobile-controls");
     this.gameControls = document.querySelector(".game-controls");
-    this.languageSelect = document.querySelector("#languageSelect");
+    this.languageButton = document.querySelector("#languageButton");
+    this.languageCode = document.querySelector("#languageCode");
+    this.languageMenu = document.querySelector("#languageMenu");
     this.setControlsBlocked(true);
-    this.languageChangeHandler = () => {
-      this.i18n.setLocale(this.languageSelect.value);
+    this.languageOptionHandler = (event) => {
+      const locale = event.currentTarget.dataset.locale;
+      this.i18n.setLocale(locale);
+      this.closeLanguageMenu();
     };
-    this.languageSelect.addEventListener("change", this.languageChangeHandler);
+    this.languageMenuButtons = [
+      ...this.languageMenu.querySelectorAll("[data-locale]"),
+    ];
+    this.languageMenuButtons.forEach((button) =>
+      button.addEventListener("click", this.languageOptionHandler),
+    );
+    this.languageToggleHandler = () => this.toggleLanguageMenu();
+    this.languageButton.addEventListener("click", this.languageToggleHandler);
+    this.languageOutsideHandler = (event) => {
+      if (!event.target.closest(".language-control")) this.closeLanguageMenu();
+    };
+    this.languageKeyHandler = (event) => {
+      if (event.key === "Escape") this.closeLanguageMenu();
+    };
+    document.addEventListener("pointerdown", this.languageOutsideHandler);
+    document.addEventListener("keydown", this.languageKeyHandler);
     this.applyTranslations();
     this.unsubscribe = this.i18n.subscribe(() => {
       this.applyTranslations();
@@ -44,7 +63,18 @@ export class GameUI {
       <main class="game-shell">
         <header class="topbar"><div class="brand"><span class="brand-dot"></span>PAC-MAN</div>
           <div class="topbar-actions">
-            <label class="language-control"><span class="sr-only" data-i18n="language">Idioma</span><select id="languageSelect" aria-label="Idioma"><option value="pt-BR">PT</option><option value="en-US">EN</option><option value="es-ES">ES</option></select></label>
+            <div class="language-control">
+              <button type="button" class="language-button" id="languageButton" aria-label="Idioma" aria-haspopup="menu" aria-expanded="false">
+                <span class="language-globe" aria-hidden="true">◎</span>
+                <span id="languageCode">PT</span>
+                <span class="language-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="language-menu" id="languageMenu" role="menu" hidden>
+                <button type="button" role="menuitemradio" data-locale="pt-BR"><span class="language-dot">BR</span><span>Português</span><span class="language-check" aria-hidden="true">✓</span></button>
+                <button type="button" role="menuitemradio" data-locale="en-US"><span class="language-dot">US</span><span>English</span><span class="language-check" aria-hidden="true">✓</span></button>
+                <button type="button" role="menuitemradio" data-locale="es-ES"><span class="language-dot">ES</span><span>Español</span><span class="language-check" aria-hidden="true">✓</span></button>
+              </div>
+            </div>
             <button type="button" class="sound-button" id="soundButton" aria-label="Alternar som" aria-pressed="true" title="Desativar som">♪</button>
           </div>
         </header>
@@ -113,8 +143,15 @@ export class GameUI {
   }
 
   applyTranslations() {
-    this.languageSelect.value = this.i18n.locale;
-    this.languageSelect.setAttribute("aria-label", this.i18n.t("language"));
+    this.languageButton.setAttribute("aria-label", this.i18n.t("language"));
+    this.languageCode.textContent = this.i18n.locale
+      .split("-")[0]
+      .toUpperCase();
+    this.languageMenuButtons.forEach((button) => {
+      const selected = button.dataset.locale === this.i18n.locale;
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-checked", String(selected));
+    });
     for (const element of document.querySelectorAll("[data-i18n]")) {
       const key = element.dataset.i18n;
       element.textContent = this.i18n.t(key);
@@ -163,11 +200,36 @@ export class GameUI {
     }
   }
 
+  toggleLanguageMenu() {
+    const willOpen = this.languageMenu.hidden;
+    if (willOpen) {
+      this.languageMenu.hidden = false;
+      this.languageButton.setAttribute("aria-expanded", "true");
+      this.languageButton.classList.add("open");
+      this.languageMenuButtons
+        .find((button) => button.dataset.locale === this.i18n.locale)
+        ?.focus();
+    } else {
+      this.closeLanguageMenu();
+    }
+  }
+
+  closeLanguageMenu() {
+    this.languageMenu.hidden = true;
+    this.languageButton.setAttribute("aria-expanded", "false");
+    this.languageButton.classList.remove("open");
+  }
+
   destroy() {
     this.unsubscribe?.();
-    this.languageSelect?.removeEventListener(
-      "change",
-      this.languageChangeHandler,
+    this.languageButton?.removeEventListener(
+      "click",
+      this.languageToggleHandler,
     );
+    this.languageMenuButtons?.forEach((button) =>
+      button.removeEventListener("click", this.languageOptionHandler),
+    );
+    document.removeEventListener("pointerdown", this.languageOutsideHandler);
+    document.removeEventListener("keydown", this.languageKeyHandler);
   }
 }

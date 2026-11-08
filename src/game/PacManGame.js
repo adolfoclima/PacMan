@@ -201,7 +201,7 @@ export class PacManGame {
           completed: this.level - 1,
           next: this.level,
         },
-        "start",
+        "nextPhase",
       );
     }
   }
