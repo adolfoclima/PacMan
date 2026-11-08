@@ -17,7 +17,7 @@
 ## Preview do jogo
 
 <div align="center">
-  <img src="./docs/game-preview.png?v=20261108" alt="Pac-Man rodando no navegador" width="860">
+  <img src="./assets/game-preview.png?v=20261108" alt="Pac-Man rodando no navegador" width="860">
 </div>
 
 ---
@@ -109,8 +109,7 @@ npm run preview
 ```text
 PacMan/
 ├── assets/
-│   └── pacman-logo.svg
-├── docs/
+│   ├── pacman-logo.svg
 │   └── game-preview.png
 ├── public/
 ├── src/

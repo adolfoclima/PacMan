@@ -60,7 +60,6 @@ export class Movement {
 
     if (!this.canMove(entity.x, entity.y, entity.dir)) {
       if (entity.dir !== 'none') {
-        this.snap(entity)
         entity.dir = 'none'
         if (isPlayer) {
           const now = performance.now()
