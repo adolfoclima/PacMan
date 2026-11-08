@@ -68,7 +68,7 @@ button {
 }
 .language-button {
   height: 42px;
-  min-width: 82px;
+  min-width: 70px;
   border: 1px solid rgba(255, 228, 56, 0.24);
   border-radius: 14px;
   padding: 0 11px;
@@ -110,16 +110,18 @@ button {
 .language-button:active {
   transform: scale(0.97);
 }
-.language-globe {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+.language-current-flag {
+  width: 25px;
+  height: 18px;
   display: grid;
   place-items: center;
-  color: #ffe438;
-  border: 1px solid rgba(255, 228, 56, 0.35);
-  font-size: 16px;
-  line-height: 1;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+}
+.language-current-flag svg,
+.language-flag svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 .language-chevron {
   width: 6px;
@@ -175,16 +177,12 @@ button {
   color: #ffe438;
   background: rgba(255, 228, 56, 0.08);
 }
-.language-dot {
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
+.language-flag {
   display: grid;
   place-items: center;
-  color: #161600;
-  background: #ffe438;
-  font-size: 9px;
-  font-weight: 900;
+  width: 28px;
+  height: 19px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.28));
 }
 .language-check {
   opacity: 0;
