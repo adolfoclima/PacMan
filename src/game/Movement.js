@@ -15,7 +15,7 @@ export class Movement {
 
   atTurnCenter (value) {
     const gridPosition = (value - GAME_CONFIG.tileSize / 2) / GAME_CONFIG.tileSize
-    return Math.abs(gridPosition - Math.round(gridPosition)) < 0.12
+    return Math.abs(gridPosition - Math.round(gridPosition)) < 0.065
   }
 
   snap (entity) {
@@ -45,37 +45,30 @@ export class Movement {
         entity.nextDirExpires = 0
       } else if (entity.nextDir === entity.dir) {
         entity.nextDirExpires = 0
-      } else if (this.atTurnCenter(entity.x) && this.atTurnCenter(entity.y)) {
+      } else if (this.atCenter(entity.x) && this.atCenter(entity.y)) {
         if (this.canMove(entity.x, entity.y, entity.nextDir)) {
           this.alignTurnAxis(entity, entity.nextDir)
           entity.dir = entity.nextDir
           entity.nextDir = entity.dir
           entity.nextDirExpires = 0
+        } else {
+          entity.nextDirExpires = 0
         }
       }
     }
 
-    if (entity.dir !== 'none' && !this.canMove(entity.x, entity.y, entity.dir)) {
-      if (this.atCenter(entity.x) && this.atCenter(entity.y)) {
+    if (this.atCenter(entity.x) && this.atCenter(entity.y)) {
+      if (!this.canMove(entity.x, entity.y, entity.dir) && entity.dir !== 'none') {
         entity.dir = 'none'
         if (isPlayer) this.playWallSound()
       }
+      this.alignToCorridor(entity)
     }
 
     const vector = DIRECTIONS[entity.dir] || DIRECTIONS.none
     const distance = speed * dt
-    if (vector.x !== 0 || vector.y !== 0) {
-      const wallLimit = this.getWallLimit(entity, vector, distance)
-      if (wallLimit !== null) {
-        if (vector.x !== 0) entity.x = wallLimit
-        if (vector.y !== 0) entity.y = wallLimit
-        entity.dir = 'none'
-        if (isPlayer) this.playWallSound()
-      } else {
-        entity.x += vector.x * distance
-        entity.y += vector.y * distance
-      }
-    }
+    entity.x += vector.x * distance
+    entity.y += vector.y * distance
     this.applyPortals(entity, isPlayer, columns, rows)
   }
 
@@ -89,35 +82,15 @@ export class Movement {
     }
   }
 
+  alignToCorridor (entity) {
+    const vector = DIRECTIONS[entity.dir] || DIRECTIONS.none
+    if (vector.x !== 0) entity.y = this.nearestCenter(entity.y)
+    if (vector.y !== 0) entity.x = this.nearestCenter(entity.x)
+  }
+
   nearestCenter (value) {
     const { tileSize } = GAME_CONFIG
     return Math.round((value - tileSize / 2) / tileSize) * tileSize + tileSize / 2
-  }
-
-  getWallLimit (entity, vector, distance) {
-    const { tileSize } = GAME_CONFIG
-    const radius = 9.5
-    const nextX = entity.x + vector.x * distance
-    const nextY = entity.y + vector.y * distance
-
-    if (vector.x !== 0) {
-      const row = Math.floor(nextY / tileSize)
-      const probeX = nextX + vector.x * radius
-      const col = Math.floor(probeX / tileSize)
-      if (this.levelState.map[row]?.[col] === '#') {
-        return vector.x > 0 ? col * tileSize - radius : (col + 1) * tileSize + radius
-      }
-    }
-
-    if (vector.y !== 0) {
-      const col = Math.floor(nextX / tileSize)
-      const probeY = nextY + vector.y * radius
-      const row = Math.floor(probeY / tileSize)
-      if (this.levelState.map[row]?.[col] === '#') {
-        return vector.y > 0 ? row * tileSize - radius : (row + 1) * tileSize + radius
-      }
-    }
-    return null
   }
 
   playWallSound () {

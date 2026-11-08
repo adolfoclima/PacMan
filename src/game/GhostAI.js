@@ -8,12 +8,7 @@ export class GhostAI {
 
   update (ghost, player, frightenedUntil, dt, now) {
     const { tileSize } = GAME_CONFIG
-    const xDistance = Math.abs(((ghost.x - tileSize / 2) / tileSize) - Math.round((ghost.x - tileSize / 2) / tileSize))
-    const yDistance = Math.abs(((ghost.y - tileSize / 2) / tileSize) - Math.round((ghost.y - tileSize / 2) / tileSize))
-    if (xDistance > 0.08 || yDistance > 0.08) ghost.centerLock = false
-
-    if (!ghost.centerLock && this.movement.atTurnCenter(ghost.x) && this.movement.atTurnCenter(ghost.y)) {
-      ghost.centerLock = true
+    if (this.movement.atCenter(ghost.x) && this.movement.atCenter(ghost.y)) {
       this.movement.snap(ghost)
       const gx = Math.round((ghost.x - tileSize / 2) / tileSize)
       const gy = Math.round((ghost.y - tileSize / 2) / tileSize)
