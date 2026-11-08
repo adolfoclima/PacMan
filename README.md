@@ -17,7 +17,7 @@
 ## Preview do jogo
 
 <div align="center">
-  <img src="./docs/game-preview.png" alt="Pac-Man rodando no navegador" width="860">
+  <img src="./docs/game-preview.png?v=20261108" alt="Pac-Man rodando no navegador" width="860">
 </div>
 
 ---
