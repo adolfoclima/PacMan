@@ -439,6 +439,7 @@ canvas {
     height: 48px;
     width: 504px;
     max-width: 100%;
+    margin-bottom: 18px;
   }
   .brand {
     font-size: 14px;
