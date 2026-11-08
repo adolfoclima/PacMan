@@ -28,6 +28,10 @@ export function GlobalStyles() {
         }
         button {
           font: inherit;
+          max-width: 100%;
+          white-space: normal;
+          overflow-wrap: anywhere;
+          text-align: center;
         }
       `}
     />

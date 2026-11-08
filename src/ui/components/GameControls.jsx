@@ -96,7 +96,7 @@ const DesktopControls = styled.footer`
   margin-top: 18px;
   border-top: 1px solid rgba(125, 129, 159, 0.18);
   display: grid;
-  grid-template-columns: 110px repeat(5, 58px);
+  grid-template-columns: 110px repeat(4, 58px) minmax(118px, 150px);
   align-items: end;
   justify-content: center;
   gap: 8px;
@@ -125,6 +125,22 @@ const DesktopControls = styled.footer`
   button small {
     font-size: 16px;
     line-height: 1;
+  }
+  button[data-action="enter"] {
+    width: 100%;
+    min-width: 118px;
+    max-width: 150px;
+    min-height: 58px;
+    height: auto;
+    padding: 7px 10px;
+  }
+  button[data-action="enter"] span {
+    width: 100%;
+    font-size: clamp(10px, 0.75vw, 12px);
+    line-height: 1.25;
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: normal;
   }
   button:hover,
   button.active {

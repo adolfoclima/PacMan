@@ -88,8 +88,12 @@ const OverlayPanel = styled.div`
     background: #ffe438;
     color: #161600;
     padding: 12px 28px;
+    width: fit-content;
+    max-width: calc(100% - 32px);
+    min-height: 44px;
     font-weight: 800;
     cursor: pointer;
+    line-height: 1.35;
     box-shadow: 0 5px 0 #a77700;
   }
   button:active {
