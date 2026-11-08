@@ -86,7 +86,7 @@ const MobileControls = styled.div`
     grid-column: 3;
     grid-row: 2;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1024px), (hover: none), (pointer: coarse) {
     display: grid;
   }
 `;
@@ -147,7 +147,7 @@ const DesktopControls = styled.footer`
     background: rgba(255, 228, 56, 0.14);
     border-color: rgba(255, 228, 56, 0.55);
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1024px), (hover: none), (pointer: coarse) {
     display: none;
   }
 `;
